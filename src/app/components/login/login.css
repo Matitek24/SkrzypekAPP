@@ -1,0 +1,67 @@
+/* Definicja palety kolorów pastelowych */
+:host {
+    --pastel-blue-bg: #e0eafc; /* Jasne tło */
+    --pastel-blue-accent: #cfdef3; /* Ciemniejszy akcent tła */
+    --glass-bg: rgba(255, 255, 255, 0.7); /* Półprzezroczysta biała */
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --primary-pastel: #89a6fa; /* Główny kolor przycisku */
+    --primary-pastel-hover: #7193f8;
+    --dark-blue-text: #2c3e50;
+    --muted-blue-text: #6c757d;
+}
+
+/* Tło całej strony logowania - gradient, żeby szkło miało co rozmywać */
+.login-background {
+    background: linear-gradient(135deg, var(--pastel-blue-bg) 0%, var(--pastel-blue-accent) 100%);
+    /* Opcjonalnie: dodanie subtelnego wzoru, żeby wzmocnić efekt szkła */
+    background-image: 
+        radial-gradient(at 47% 33%, hsl(223.16, 79%, 89%) 0, transparent 59%), 
+        radial-gradient(at 82% 65%, hsl(218.18, 77%, 84%) 0, transparent 55%);
+}
+
+/* --- GLASSMORPHISM CARD --- */
+.glass-card {
+    background: var(--glass-bg); /* Półprzezroczyste tło */
+    backdrop-filter: blur(15px); /* KLUCZOWE: Rozmycie tła pod spodem */
+    -webkit-backdrop-filter: blur(15px); /* Dla Safari */
+    border: 1px solid var(--glass-border); /* Subtelna biała ramka */
+    border-radius: 24px; /* Mocne zaokrąglenie */
+    max-width: 450px;
+    width: 100%;
+}
+
+/* Stylizacja tekstów */
+.text-darkblue { color: var(--dark-blue-text); }
+.text-muted-blue { color: var(--muted-blue-text); }
+
+/* Stylizacja inputów, żeby pasowały do szkła */
+.glass-input {
+    background: rgba(255, 255, 255, 0.5); /* Lekko prześwitujące inputy */
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+}
+
+.glass-input:focus {
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(137, 166, 250, 0.25); /* Pastelowy cień przy fokusie */
+    border-color: var(--primary-pastel);
+}
+
+/* Własny pastelowy przycisk */
+.btn-pastel-primary {
+    background-color: var(--primary-pastel);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-pastel-primary:hover {
+    background-color: var(--primary-pastel-hover);
+    transform: translateY(-3px); /* Lekkie uniesienie */
+    box-shadow: 0 10px 20px -10px rgba(137, 166, 250, 0.5) !important;
+}
+
+.pastel-icon {
+    color: var(--primary-pastel) !important;
+}
