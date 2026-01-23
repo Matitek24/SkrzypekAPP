@@ -1,32 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgIf } from "@angular/common";
+import { AuthService } from '../../core/services/auth.js';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [FormsModule, NgIf],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrl: './login.css'
 })
-export class Login implements OnInit {
-username: string = '';
-password: string = '';
+export class Login {
+  username = '';
+  password = '';
+  errorMessage = '';
+  isLoading = false;
 
-constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-ngOnInit() {
-  console.log('Czyszczenie sesji...');
-  localStorage.removeItem('isLoggedIn'); 
-  // Albo localStorage.clear(); jeśli chcesz wywalić wszystko
-}
-onLogin(event: Event){
-  event.preventDefault();
-
-  if(this.username === 'admin' && this.password === 'password'){
-    localStorage.setItem('isLoggedIn', 'true');
-    this.router.navigate(['/dashboard']);
-  } else {
-    alert('Invalid credentials');
+  onLogin(event: Event) {
+    event.preventDefault();
+    this.errorMessage = '';
+    this.isLoading = true;
+    
+    this.authService.login({ username: this.username, password: this.password }).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        console.log('Sukces! Token zapisany.');
+        this.router.navigate(['/dashboard']); 
+      },
+      error: (err) => {
+        this.isLoading = false;
+        // Obsługa błędów z backendu (np. 401 Unauthorized)
+        if (err.status === 401) {
+          this.errorMessage = 'Nieprawidłowy login lub hasło.';
+        } else {
+          this.errorMessage = 'Błąd serwera. Spróbuj ponownie później.';
+        }
+      }
+    });
   }
-}
 }
