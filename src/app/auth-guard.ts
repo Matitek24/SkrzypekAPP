@@ -1,17 +1,20 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const token = localStorage.getItem('token');
-  console.log('--- GUARD CHECK ---');
-  console.log('Token w pamięci:', token);
+  const router = inject(Router);
 
   if (token) {
-    return true;
-  } else {
-    console.warn('Guard zablokował dostęp - brak tokena!');
-    const router = inject(Router);
-    router.navigate(['/login']);
-    return false;
+    const decoded: any = jwtDecode(token);
+    const isExpired = decoded.exp < Date.now() / 1000;
+
+    if (!isExpired) {
+      return true;
+    }
   }
+
+  router.navigate(['/login']);
+  return false;
 };

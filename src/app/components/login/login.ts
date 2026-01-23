@@ -27,12 +27,10 @@ export class Login {
     this.authService.login({ username: this.username, password: this.password }).subscribe({
       next: (res) => {
         this.isLoading = false;
-        console.log('Sukces! Token zapisany.');
         this.router.navigate(['/dashboard']); 
       },
       error: (err) => {
         this.isLoading = false;
-        // Obsługa błędów z backendu (np. 401 Unauthorized)
         if (err.status === 401) {
           this.errorMessage = 'Nieprawidłowy login lub hasło.';
         } else {
@@ -41,4 +39,8 @@ export class Login {
       }
     });
   }
+
+  ngOnInit() {
+    this.authService.logout();
+}
 }
