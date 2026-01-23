@@ -6,20 +6,17 @@ import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
 
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const authService = inject(AuthService);
-  const token = localStorage.getItem('token');
 
-  let cloned = req;
-  if (token) {
-    cloned = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
-  }
+  const cloned = req.clone({ withCredentials: true });
 
   return next(cloned).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        authService.logout();
+        localStorage.clear();
         router.navigate(['/login']);
       }
       return throwError(() => error);
