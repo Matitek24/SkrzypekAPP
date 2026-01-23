@@ -1,1 +1,61 @@
-<p>dashboard works!</p>
+<div class="d-flex" id="wrapper">
+  <div class="bg-white border-end shadow-sm" style="width: 260px; min-height: 100vh;">
+    <div class="p-4 fs-4 fw-bold text-primary border-bottom">
+      Skrzypek<span class="text-dark">App</span>
+    </div>
+    <div class="p-3">
+      <button (click)="currentSection = 'overview'" 
+              [class.active-link]="currentSection === 'overview'"
+              class="btn w-100 text-start border-0 rounded-4 mb-2 p-3 nav-btn">
+        <i class="bi bi-grid-1x2-fill me-2"></i> Przegląd
+      </button>
+      <button (click)="currentSection = 'websites'" 
+              [class.active-link]="currentSection === 'websites'"
+              class="btn w-100 text-start border-0 rounded-4 mb-2 p-3 nav-btn">
+        <i class="bi bi-globe me-2"></i> Moje Strony
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-grow-1 bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3 shadow-sm">
+      <div class="container-fluid">
+        <div class="d-flex align-items-center">
+            <p-avatar [label]="username?.charAt(0)?.toUpperCase() || 'U'" styleClass="me-2" shape="circle"></p-avatar>
+            <span class="fw-bold">Cześć, {{ username }}!</span>
+        </div>
+        <div class="ms-auto">
+          <p-button label="Wyloguj" icon="pi pi-sign-out" [outlined]="true" severity="danger" [rounded]="true" (onClick)="onLogout()"></p-button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid p-4">
+      <div *ngIf="currentSection === 'overview'">
+        <h4 class="fw-bold mb-4 text-dark">Twój status</h4>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <p-card header="12" subheader="Aktywne projekty" styleClass="border-0 shadow-soft border-round-2xl">
+              <i class="bi bi-layers text-primary fs-4"></i>
+            </p-card>
+          </div>
+          <div class="col-md-4">
+            <p-card header="Stabilny" subheader="Status serwerów" styleClass="border-0 shadow-soft border-round-2xl">
+                <i class="bi bi-cpu text-success fs-4"></i>
+            </p-card>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="currentSection === 'websites'">
+        <h4 class="fw-bold mb-4">Moje Strony</h4>
+        <p-card styleClass="text-center p-5 border-round-3xl shadow-soft">
+          <i class="bi bi-cloud-plus text-primary display-4 mb-3"></i>
+          <h5>Brak monitorowanych stron</h5>
+          <p class="text-muted mb-4">Dodaj swoją pierwszą domenę, aby zacząć.</p>
+          <p-button label="Dodaj stronę" icon="pi pi-plus" [rounded]="true"></p-button>
+        </p-card>
+      </div>
+    </div>
+  </div>
+</div>

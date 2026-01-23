@@ -1,1 +1,56 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
+
+
+:root {
+  --bg-app: #f8fafc;
+  --sidebar-width: 260px;
+}
+
+body {
+    background-color: var(--bg-app) !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* Subtelny cień dla nowoczesnych kart */
+.shadow-soft {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02) !important;
+}
+
+.transition-all {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Styl dla aktywnego przycisku w menu - pastelowy błękit */
+.btn-primary {
+    background-color: #eef2ff !important;
+    color: #6366f1 !important;
+    font-weight: 600;
+}
+
+/* Pastelowy badge sukcesu */
+.bg-success-soft {
+  background-color: #ecfdf5 !important;
+  color: #10b981 !important;
+  border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+/* Customizacja dialogu PrimeNG */
+.p-dialog .p-dialog-header {
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  padding: 2rem 2rem 1rem 2rem;
+}
+
+.p-dialog .p-dialog-content {
+  padding: 0 2rem 2rem 2rem;
+}
+
+.p-dialog .p-dialog-footer {
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  padding: 1rem 2rem 2rem 2rem;
+}
+
+.border-round-xl {
+  border-radius: 12px !important;
+}
