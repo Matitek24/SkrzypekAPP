@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-
+import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth/login';
+  private apiUrl = `${environment.apiUrl}/auth/login`;
 
   constructor(private http: HttpClient) {}
 
   login(credentials: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, credentials, { withCredentials: true }).pipe(
       tap(response => {
-        // Nie zapisujemy już tokena! 
-        // Możemy zapisać tylko username do wyświetlenia w UI
         localStorage.setItem('username', response.username);
       })
     );
@@ -27,7 +25,7 @@ export class AuthService {
           localStorage.clear();
           console.log('Sesja wyczyszczona na backendzie i frontendzie');
         },
-        error: () => localStorage.clear() // W razie błędu i tak czyścimy front
+        error: () => localStorage.clear() 
       });
   }
 

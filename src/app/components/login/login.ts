@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NgIf } from "@angular/common";
 import { AuthService } from '../../core/services/auth.js';
 import { OnInit } from '@angular/core';
-
+import { LoginRequest, AuthResponse } from '../../core/models/auth.models.model.js';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -12,6 +12,7 @@ import { OnInit } from '@angular/core';
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
+
 export class Login implements OnInit {
   username = '';
   password = '';
@@ -21,20 +22,24 @@ export class Login implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(event: Event) {
+    const credentials: LoginRequest = { 
+      username: this.username, 
+      password: this.password 
+    };
+
     event.preventDefault();
     this.errorMessage = '';
     this.isLoading = true;
   
-    this.authService.login({ username: this.username, password: this.password }).subscribe({
-      next: (res) => {
+    this.authService.login(credentials).subscribe({
+      next: (res: AuthResponse) => {
         this.isLoading = false;
+        localStorage.setItem('username', res.username); 
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.isLoading = false;
-        console.log('Szczegóły błędu:', err); // Sprawdź co dokładnie tu siedzi
-        
-        // Jeśli status to 401, to na 100% złe hasło/login
+    
         if (err.status === 401) {
           this.errorMessage = 'Nieprawidłowy login lub hasło.';
         } else {
@@ -45,9 +50,7 @@ export class Login implements OnInit {
   }
 
   ngOnInit() {
-    // Jak tylko wejdziesz na stronę logowania, czyścimy wszystko
     this.authService.logout(); 
-    // Dodatkowo usuwamy śmieci z localStorage na wszelki wypadek
     localStorage.clear();
   }
 }
