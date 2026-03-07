@@ -17,7 +17,7 @@
     width: 260px;
   }
   
-  /* KLUCZ DO NAPRAWY IKONEK: Sztywny kontener na ikonę */
+
   .icon-container {
     min-width: 60px;      /* Zawsze ta sama szerokość */
     height: 50px;
@@ -43,7 +43,7 @@
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    box-shadow: 0 4px 10px rgba(234, 81, 31, 0.3);
+    box-shadow: 0 4px 10px var(--brand-accent);
   }
   
   .brand-text {

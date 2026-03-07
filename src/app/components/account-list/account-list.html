@@ -1,0 +1,40 @@
+<div class="fintech-dashboard">
+  
+    <header class="balance-section">
+      <p class="balance-subtitle">Dostępne środki</p>
+      <h1 class="balance-total">{{ total | currency:'PLN':'symbol':'1.2-2' }}</h1>
+    </header>
+  
+    <section class="accounts-container">
+      <div class="accounts-header">
+        <h2>Twoje konta</h2>
+        <button class="btn-icon-only" title="Dodaj nowe konto">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+  
+      <div class="accounts-list">
+        @for (item of accounts; track item.id) {
+          <div class="clean-card">
+            <div class="card-left">
+              <div class="icon-box">
+                <i [class]="item.definition.icon"></i>
+              </div>
+              <span class="bank-name">{{ item.definition.name }}</span>
+            </div>
+            <div class="card-right">
+              <span class="bank-balance">{{ item.balance | currency:'PLN' }}</span>
+              <i class="fa-solid fa-chevron-right arrow-icon"></i>
+            </div>
+          </div>
+        } @empty {
+          <div class="clean-empty-state">
+            <i class="fa-solid fa-wallet empty-icon"></i>
+            <p>Nie masz jeszcze żadnych kont.</p>
+            <button class="btn-text">Dodaj pierwsze konto</button>
+          </div>
+        }
+      </div>
+    </section>
+  
+  </div>

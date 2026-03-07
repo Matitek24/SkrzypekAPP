@@ -3,9 +3,9 @@
 
 :root {
 
-  --brand-bg: #f4f8f6;      /* Jasne tło */
-  --brand-primary: #00355c; /* Głęboki granat */
-  --brand-accent: #ea511f;  /* Energiczny pomarańcz */
+  --brand-bg: #f9f4f7;      /* Jasne tło */
+  --brand-primary: #3e3f4b; /* Głęboki granat */
+  --brand-accent: #5ec785;  /* Energiczny pomarańcz */
   
   /* Nadpisywanie zmiennych systemowych Bootstrapa (opcjonalnie) */
   --bs-primary: var(--brand-primary);

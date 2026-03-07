@@ -12,7 +12,7 @@ export class Sidebar implements OnInit {
   @Input() activeSection: string = 'overview';
   @Output() sectionChange = new EventEmitter<string>();
 
-  isExpanded: boolean = true; 
+  isExpanded: boolean = false; 
   userInitial: string = 'U';
   username: string = 'Użytkownik'; // Dodajemy to!
 
