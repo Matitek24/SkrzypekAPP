@@ -2,8 +2,14 @@
 
 
 :root {
-  --bg-app: #f8fafc;
-  --sidebar-width: 260px;
+
+  --brand-bg: #f4f8f6;      /* Jasne tło */
+  --brand-primary: #00355c; /* Głęboki granat */
+  --brand-accent: #ea511f;  /* Energiczny pomarańcz */
+  
+  /* Nadpisywanie zmiennych systemowych Bootstrapa (opcjonalnie) */
+  --bs-primary: var(--brand-primary);
+  --bs-body-bg: var(--brand-bg);
 }
 
 body {
@@ -53,4 +59,24 @@ body {
 
 .border-round-xl {
   border-radius: 12px !important;
+}
+.user-avatar-circle {
+  width: 40px;
+  height: 40px;
+  background-color: var(--brand-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.text-brand-accent {
+  color: var(--brand-accent) !important;
+}
+
+.animate__fadeIn {
+  animation-duration: 0.5s;
 }

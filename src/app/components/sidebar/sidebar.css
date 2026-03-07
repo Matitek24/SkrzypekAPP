@@ -1,0 +1,120 @@
+.sk-sidebar {
+    width: 84px;          /* Minimalnie poszerzony dla idealnego wyśrodkowania */
+    flex-shrink: 0;       /* Blokuje zgniatanie paska przez treść! */
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    background-color: var(--brand-primary);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0.5rem; /* Zmniejszony padding boczny */
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-x: hidden;
+    z-index: 1000;
+  }
+  
+  .sk-sidebar.expanded {
+    width: 260px;
+  }
+  
+  /* KLUCZ DO NAPRAWY IKONEK: Sztywny kontener na ikonę */
+  .icon-container {
+    min-width: 60px;      /* Zawsze ta sama szerokość */
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Ikonka jest perfekcyjnie na środku */
+    font-size: 1.3rem;
+  }
+  
+  .brand-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .logo-circle {
+    width: 45px;
+    height: 45px;
+    background-color: var(--brand-accent);
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 10px rgba(234, 81, 31, 0.3);
+  }
+  
+  .brand-text {
+    color: white;
+    font-weight: 800;
+    font-size: 1.3rem;
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+  
+  .sk-sidebar.expanded .brand-text {
+    opacity: 1;
+    transition-delay: 0.1s;
+  }
+  
+  /* ELEMENTY MENU */
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .nav-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0; /* Padding wyzerowany, bo marginy robi icon-container */
+    overflow: hidden; /* Przycina niewidoczny tekst */
+  }
+  
+  .nav-item:hover, .nav-item.active {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: white;
+  }
+  
+  .nav-item.active {
+    color: var(--brand-accent);
+  }
+  
+  .nav-text {
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-10px); /* Efekt wjeżdżania tekstu */
+    transition: all 0.3s ease;
+  }
+  
+  .sk-sidebar.expanded .nav-text {
+    opacity: 1;
+    transform: translateX(0);
+    margin-left: 0.5rem;
+  }
+  
+  /* AWATAR NA DOLE */
+  .user-avatar-circle {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    color: var(--brand-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  
+  .text-brand-accent { color: var(--brand-accent); }

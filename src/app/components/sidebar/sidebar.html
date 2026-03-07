@@ -1,0 +1,42 @@
+<div class="sk-sidebar" [class.expanded]="isExpanded">
+  
+    <div class="brand-section">
+      <div class="icon-container">
+        <div class="logo-circle">
+          <i class="bi bi-layers-half"></i>
+        </div>
+      </div>
+      <span class="brand-text">Skrzypek<span class="text-brand-accent">App</span></span>
+    </div>
+  
+    <nav class="nav-menu">
+      <button class="nav-item" [class.active]="activeSection === 'overview'" (click)="changeSection('overview')">
+        <div class="icon-container"><i class="bi bi-grid"></i></div>
+        <span class="nav-text">Strona Główna</span>
+      </button>
+      
+      <button class="nav-item" [class.active]="activeSection === 'websites'" (click)="changeSection('websites')">
+        <div class="icon-container"><i class="bi bi-globe2"></i></div>
+        <span class="nav-text">Budzet</span>
+      </button>
+  
+
+    </nav>
+  
+    <div class="bottom-section mt-auto">
+      <button class="nav-item mb-2 toggle-btn" (click)="toggleSidebar()">
+        <div class="icon-container">
+          <i class="bi" [ngClass]="isExpanded ? 'bi-chevron-double-left' : 'bi-chevron-double-right'"></i>
+        </div>
+        <span class="nav-text">Zwiń panel</span>
+      </button>
+  
+      <button class="nav-item user-btn">
+        <div class="icon-container">
+          <div class="user-avatar-circle">{{ userInitial }}</div>
+        </div>
+        <span class="nav-text fw-bold text-white">{{ username }}</span>
+      </button>
+    </div>
+  
+  </div>
