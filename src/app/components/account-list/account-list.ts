@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../core/services/account';
 import { Account } from '../../core/models/account.model.js';
-import { CurrencyPipe, DatePipe, CommonModule } from '@angular/common';
+import { CurrencyPipe, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-account-list',
   standalone: true,
-  imports: [CurrencyPipe, DatePipe, CommonModule],
+  imports: [CurrencyPipe, CommonModule],
   templateUrl: './account-list.html',
   styleUrl: './account-list.css'
 })

@@ -2,7 +2,7 @@
   
     <header class="balance-section">
       <p class="balance-subtitle">Dostępne środki</p>
-      <h1 class="balance-total">{{ total | currency:'PLN':'symbol':'1.2-2' }}</h1>
+      <h1 class="balance-total">{{ total | currency:' PLN ':'symbol':'1.2-2' }}</h1>
     </header>
   
     <section class="accounts-container">
@@ -23,7 +23,7 @@
               <span class="bank-name">{{ item.definition.name }}</span>
             </div>
             <div class="card-right">
-              <span class="bank-balance">{{ item.balance | currency:'PLN' }}</span>
+              <span class="bank-balance">{{ item.balance | currency:' PLN ' }}</span>
               <i class="fa-solid fa-chevron-right arrow-icon"></i>
             </div>
           </div>
