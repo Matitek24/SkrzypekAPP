@@ -1,40 +1,65 @@
 <div class="fintech-dashboard">
-  
-    <header class="balance-section">
-      <p class="balance-subtitle">Dostępne środki</p>
-      <h1 class="balance-total">{{ total | currency:' PLN ':'symbol':'1.2-2' }}</h1>
-    </header>
-  
-    <section class="accounts-container">
-      <div class="accounts-header">
-        <h2>Twoje konta</h2>
-        <button class="btn-icon-only" title="Dodaj nowe konto">
-          <i class="fa-solid fa-plus"></i>
-        </button>
-      </div>
-  
-      <div class="accounts-list">
-        @for (item of accounts; track item.id) {
-          <div class="clean-card">
-            <div class="card-left">
-              <div class="icon-box">
-                <i [class]="item.definition.icon"></i>
-              </div>
-              <span class="bank-name">{{ item.definition.name }}</span>
-            </div>
-            <div class="card-right">
-              <span class="bank-balance">{{ item.balance | currency:' PLN ' }}</span>
-              <i class="fa-solid fa-chevron-right arrow-icon"></i>
-            </div>
-          </div>
-        } @empty {
-          <div class="clean-empty-state">
-            <i class="fa-solid fa-wallet empty-icon"></i>
-            <p>Nie masz jeszcze żadnych kont.</p>
-            <button class="btn-text">Dodaj pierwsze konto</button>
-          </div>
-        }
-      </div>
-    </section>
-  
+
+  <!-- NAGŁÓWEK STRONY -->
+  <div class="budget-page-header">
+    <h1>Budżet</h1>
+    <p>Zarządzaj swoimi kontami i śledź przepływ finansów.</p>
   </div>
+
+  <!-- KARTA SALDA -->
+  <div class="balance-card">
+    <div class="balance-label">Łączne saldo</div>
+    <div class="balance-amount">{{ total | currency:' PLN ':'symbol':'1.2-2' }}</div>
+    <div class="balance-stats">
+      <div class="balance-stat-item">
+        <i class="bi bi-arrow-down-circle-fill"></i>
+        <span>Przychody: <strong>3 200 PLN</strong></span>
+      </div>
+      <div class="balance-stat-item">
+        <i class="bi bi-arrow-up-circle-fill"></i>
+        <span>Wydatki: <strong>1 840 PLN</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA KONT -->
+  <section class="accounts-container">
+
+    <div class="accounts-header">
+      <h2>Twoje konta</h2>
+      <button class="btn-add-account" title="Dodaj nowe konto">
+        <i class="bi bi-plus-lg"></i>
+        Dodaj konto
+      </button>
+    </div>
+
+    <div class="accounts-list">
+      @for (item of accounts; track item.id) {
+        <div class="clean-card">
+          <div class="card-left">
+            <div class="icon-box">
+              <i [class]="item.definition.icon"></i>
+            </div>
+            <div>
+              <div class="bank-name">{{ item.definition.name }}</div>
+              <div class="bank-type">Konto osobiste</div>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="bank-balance">{{ item.balance | currency:' PLN ' }}</span>
+            <i class="fa-solid fa-chevron-right arrow-icon"></i>
+          </div>
+        </div>
+      } @empty {
+        <div class="clean-empty-state">
+          <i class="bi bi-wallet2 empty-icon"></i>
+          <p class="fw-medium mb-1" style="color: var(--color-text-sub);">Nie masz jeszcze żadnych kont</p>
+          <p class="small mb-2">Dodaj pierwsze konto, aby zacząć śledzić budżet.</p>
+          <button class="btn-text">Dodaj pierwsze konto →</button>
+        </div>
+      }
+    </div>
+
+  </section>
+
+</div>

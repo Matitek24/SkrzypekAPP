@@ -1,120 +1,315 @@
-.sk-sidebar {
-    width: 84px;          /* Minimalnie poszerzony dla idealnego wyśrodkowania */
-    flex-shrink: 0;       /* Blokuje zgniatanie paska przez treść! */
-    height: 100vh;
-    position: sticky;
-    top: 0;
-    background-color: var(--brand-primary);
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem 0.5rem; /* Zmniejszony padding boczny */
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow-x: hidden;
-    z-index: 1000;
-  }
-  
-  .sk-sidebar.expanded {
-    width: 260px;
-  }
-  
+/* ============================================================
+   SIDEBAR — Apple/macOS style · Pastelowy blekitny akcent
+   ============================================================ */
 
-  .icon-container {
-    min-width: 60px;      /* Zawsze ta sama szerokość */
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Ikonka jest perfekcyjnie na środku */
-    font-size: 1.3rem;
-  }
-  
-  .brand-section {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-  
-  .logo-circle {
-    width: 45px;
-    height: 45px;
-    background-color: var(--brand-accent);
-    color: white;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    box-shadow: 0 4px 10px var(--brand-accent);
-  }
-  
-  .brand-text {
-    color: white;
-    font-weight: 800;
-    font-size: 1.3rem;
-    opacity: 0;
-    white-space: nowrap;
-    transition: opacity 0.2s;
-  }
-  
-  .sk-sidebar.expanded .brand-text {
-    opacity: 1;
-    transition-delay: 0.1s;
-  }
-  
-  /* ELEMENTY MENU */
-  .nav-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .nav-item {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    border-radius: 12px;
-    color: rgba(255, 255, 255, 0.5);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    padding: 0; /* Padding wyzerowany, bo marginy robi icon-container */
-    overflow: hidden; /* Przycina niewidoczny tekst */
-  }
-  
-  .nav-item:hover, .nav-item.active {
-    background-color: rgba(255, 255, 255, 0.08);
-    color: white;
-  }
-  
-  .nav-item.active {
-    color: var(--brand-accent);
-  }
-  
-  .nav-text {
-    font-weight: 500;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(-10px); /* Efekt wjeżdżania tekstu */
-    transition: all 0.3s ease;
-  }
-  
-  .sk-sidebar.expanded .nav-text {
-    opacity: 1;
-    transform: translateX(0);
-    margin-left: 0.5rem;
-  }
-  
-  /* AWATAR NA DOLE */
-  .user-avatar-circle {
-    width: 40px;
-    height: 40px;
-    background-color: white;
-    color: var(--brand-primary);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-  }
-  
-  .text-brand-accent { color: var(--brand-accent); }
+.sk-sidebar {
+  width: var(--sidebar-width-collapsed);
+  flex-shrink: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0 1rem;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden; /* Zablokowany glowy scroll */
+  z-index: 100;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
+}
+
+.sk-sidebar.expanded {
+  width: var(--sidebar-width-expanded);
+}
+
+/* ---- BRAND / LOGO ---- */
+.brand-section {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  margin-bottom: 1.5rem;
+}
+
+.icon-container {
+  min-width: 48px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.logo-circle {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.28);
+  flex-shrink: 0;
+}
+
+.brand-text {
+  color: var(--color-text-main);
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  letter-spacing: -0.2px;
+}
+
+.brand-text span {
+  color: var(--color-primary);
+}
+
+.sk-sidebar.expanded .brand-text {
+  opacity: 1;
+  transition-delay: 0.08s;
+  margin-left: 0.5rem;
+}
+
+/* ---- DIVIDER ---- */
+.nav-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 6px 12px;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+/* ---- SECTION LABEL ---- */
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: 6px 16px 2px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sk-sidebar.expanded .nav-section-label {
+  opacity: 1;
+  transition-delay: 0.1s;
+}
+
+/* ---- NAV MENU ---- */
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 0 8px;
+  flex: 1;
+  overflow-y: auto; /* Tylko menu sie przewija! */
+  overflow-x: hidden;
+}
+
+/* SCROLLBAR DLA MENU */
+.nav-menu::-webkit-scrollbar { width: 4px; }
+.nav-menu::-webkit-scrollbar-track { background: transparent; }
+.nav-menu::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 99px; }
+
+/* ---- NAV ITEM ---- */
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-md);
+  color: var(--color-text-sub);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  padding: 0;
+  overflow: hidden;
+  text-align: left;
+  min-height: 40px;
+  flex-shrink: 0;
+}
+
+.nav-item:hover {
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-main);
+}
+
+.nav-item.active {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+/* ---- NAV TEXT ---- */
+.nav-text {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  flex: 1;
+}
+
+.sk-sidebar.expanded .nav-text {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---- BADGE ---- */
+.nav-badge {
+  display: none;
+  min-width: 18px;
+  height: 18px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  padding: 0 4px;
+}
+
+.sk-sidebar.expanded .nav-badge {
+  display: flex;
+}
+
+/* ---- BOTTOM SECTION ---- */
+.bottom-section {
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex-shrink: 0; /* Zeby nigdy nie zniknelo przy scrollowaniu */
+}
+
+.toggle-btn {
+  color: var(--color-text-muted);
+}
+.toggle-btn:hover {
+  color: var(--color-text-main);
+}
+
+/* ---- USER FOOTER (UX) ---- */
+.user-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.user-footer.collapsed {
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  min-width: 0;
+}
+
+.sk-sidebar.expanded .user-info {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.user-footer.collapsed .user-info {
+  display: none;
+}
+
+.user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- ACTIONS (Settings & Logout) ---- */
+.user-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.sk-sidebar.expanded .user-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.user-footer.collapsed .user-actions {
+  flex-direction: column;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.action-icon-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-sub);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+}
+
+.action-icon-btn:hover, .action-icon-btn.active {
+  background: var(--color-surface-alt);
+  color: var(--color-text-main);
+}
+
+.action-icon-btn.logout {
+  color: var(--color-text-sub);
+}
+
+.action-icon-btn.logout:hover {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+/* ---- AVATAR ---- */
+.user-avatar-circle {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, var(--blue-400), var(--blue-600));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.22);
+}

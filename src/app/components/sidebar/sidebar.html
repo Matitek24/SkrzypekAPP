@@ -1,42 +1,146 @@
 <div class="sk-sidebar" [class.expanded]="isExpanded">
-  
-    <div class="brand-section">
+
+  <!-- LOGO -->
+  <div class="brand-section">
+    <div class="icon-container">
+      <div class="logo-circle">
+        <i class="bi bi-layers-half"></i>
+      </div>
+    </div>
+    <span class="brand-text">Skrzypek<span>App</span></span>
+  </div>
+
+  <div class="nav-divider"></div>
+
+  <!-- MENU -->
+  <nav class="nav-menu">
+
+    <!-- Ogolne -->
+    <span class="nav-section-label">Ogolne</span>
+
+    <button class="nav-item" id="nav-overview"
+      [class.active]="activeSection === 'overview'"
+      (click)="changeSection('overview')">
+      <div class="icon-container"><i class="bi bi-house"></i></div>
+      <span class="nav-text">Strona Glowna</span>
+    </button>
+
+    <div class="nav-divider"></div>
+
+    <!-- Finansowa -->
+    <span class="nav-section-label">Finansowa</span>
+
+    <button class="nav-item" id="nav-budget"
+      [class.active]="activeSection === 'budget'"
+      (click)="changeSection('budget')">
+      <div class="icon-container"><i class="bi bi-wallet2"></i></div>
+      <span class="nav-text">Budzet</span>
+    </button>
+
+    <button class="nav-item" id="nav-transactions"
+      [class.active]="activeSection === 'transactions'"
+      (click)="changeSection('transactions')">
+      <div class="icon-container"><i class="bi bi-arrow-left-right"></i></div>
+      <span class="nav-text">Transakcje</span>
+      <span class="nav-badge">3</span>
+    </button>
+
+    <button class="nav-item" id="nav-analytics"
+      [class.active]="activeSection === 'analytics'"
+      (click)="changeSection('analytics')">
+      <div class="icon-container"><i class="bi bi-bar-chart-line"></i></div>
+      <span class="nav-text">Analityka</span>
+    </button>
+
+    <div class="nav-divider"></div>
+
+    <!-- Portfolio -->
+    <span class="nav-section-label">Portfolio</span>
+
+    <button class="nav-item" id="nav-portfolio"
+      [class.active]="activeSection === 'portfolio'"
+      (click)="changeSection('portfolio')">
+      <div class="icon-container"><i class="bi bi-briefcase"></i></div>
+      <span class="nav-text">Projekty</span>
+    </button>
+
+    <button class="nav-item" id="nav-skills"
+      [class.active]="activeSection === 'skills'"
+      (click)="changeSection('skills')">
+      <div class="icon-container"><i class="bi bi-code-slash"></i></div>
+      <span class="nav-text">Umiejetnosci</span>
+    </button>
+
+    <div class="nav-divider"></div>
+
+    <!-- DevOps -->
+    <span class="nav-section-label">DevOps</span>
+
+    <button class="nav-item" id="nav-deployments"
+      [class.active]="activeSection === 'deployments'"
+      (click)="changeSection('deployments')">
+      <div class="icon-container"><i class="bi bi-cloud-upload"></i></div>
+      <span class="nav-text">Wdrozenia</span>
+    </button>
+
+    <button class="nav-item" id="nav-monitoring"
+      [class.active]="activeSection === 'monitoring'"
+      (click)="changeSection('monitoring')">
+      <div class="icon-container"><i class="bi bi-activity"></i></div>
+      <span class="nav-text">Monitoring</span>
+    </button>
+
+    <div class="nav-divider"></div>
+
+    <!-- Goal -->
+    <span class="nav-section-label">Goal</span>
+
+    <button class="nav-item" id="nav-goals"
+      [class.active]="activeSection === 'goals'"
+      (click)="changeSection('goals')">
+      <div class="icon-container"><i class="bi bi-trophy"></i></div>
+      <span class="nav-text">Cele</span>
+    </button>
+
+    <button class="nav-item" id="nav-habits"
+      [class.active]="activeSection === 'habits'"
+      (click)="changeSection('habits')">
+      <div class="icon-container"><i class="bi bi-check2-circle"></i></div>
+      <span class="nav-text">Nawyki</span>
+    </button>
+
+  </nav>
+
+  <!-- DOLNA SEKCJA -->
+  <div class="bottom-section mt-auto">
+
+    <button class="nav-item toggle-btn" id="sidebar-toggle" (click)="toggleSidebar()">
       <div class="icon-container">
-        <div class="logo-circle">
-          <i class="bi bi-layers-half"></i>
+        <i class="bi" [ngClass]="isExpanded ? 'bi-chevron-double-left' : 'bi-chevron-double-right'"></i>
+      </div>
+      <span class="nav-text">Zwiń panel</span>
+    </button>
+
+    <div class="nav-divider"></div>
+
+    <div class="user-footer" [class.collapsed]="!isExpanded">
+      <div class="user-profile">
+        <div class="user-avatar-circle">{{ userInitial }}</div>
+        <div class="user-info">
+          <span class="user-name">{{ username }}</span>
+          <span class="user-role" style="font-size: 11px; color: var(--color-text-muted);">Administrator</span>
         </div>
       </div>
-      <span class="brand-text">Skrzypek<span class="text-brand-accent">App</span></span>
+      <div class="user-actions">
+        <button class="action-icon-btn" title="Ustawienia" (click)="changeSection('settings')" [class.active]="activeSection === 'settings'">
+          <i class="bi bi-gear"></i>
+        </button>
+        <button class="action-icon-btn logout" title="Wyloguj się" (click)="onLogout()">
+          <i class="bi bi-power"></i>
+        </button>
+      </div>
     </div>
-  
-    <nav class="nav-menu">
-      <button class="nav-item" [class.active]="activeSection === 'overview'" (click)="changeSection('overview')">
-        <div class="icon-container"><i class="bi bi-person-bounding-box"></i></div>
-        <span class="nav-text">Strona Główna</span>
-      </button>
-      
-      <button class="nav-item" [class.active]="activeSection === 'budget'" (click)="changeSection('budget')">
-        <div class="icon-container"><i class="bi bi-cash-coin"></i></div>
-        <span class="nav-text">Budzet</span>
-      </button>
-  
 
-    </nav>
-  
-    <div class="bottom-section mt-auto">
-      <button class="nav-item mb-2 toggle-btn" (click)="toggleSidebar()">
-        <div class="icon-container">
-          <i class="bi" [ngClass]="isExpanded ? 'bi-chevron-double-left' : 'bi-chevron-double-right'"></i>
-        </div>
-        <span class="nav-text">Zwiń panel</span>
-      </button>
-  
-      <button class="nav-item user-btn">
-        <div class="icon-container">
-          <div class="user-avatar-circle">{{ userInitial }}</div>
-        </div>
-        <span class="nav-text fw-bold text-white">{{ username }}</span>
-      </button>
-    </div>
-  
   </div>
+
+</div>

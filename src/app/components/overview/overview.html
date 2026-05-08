@@ -1,1 +1,21 @@
-<h4 class="fw-bold mb-4" style="color: var(--brand-primary)">Overview</h4>
+<div class="page-header">
+  <h1>Witaj, {{ username }}</h1>
+  <p>Oto podsumowanie Twoich finansów i aktywności.</p>
+</div>
+
+<!-- KARTA SALDA NA STRONIE GLOWNEJ -->
+<div class="row g-4">
+  <div class="col-12 col-md-6 col-xl-4">
+    <div class="minimal-balance-card">
+      <div class="minimal-balance-header">
+        <span class="minimal-label">Łączny kapitał</span>
+        <i class="bi bi-wallet2 text-muted-app"></i>
+      </div>
+      <div class="minimal-balance-amount">{{ totalBalance | currency:' PLN ':'symbol':'1.2-2' }}</div>
+      <div class="minimal-balance-footer">
+        <span class="text-success"><i class="bi bi-arrow-up-right"></i> +2.4%</span>
+        <span class="text-muted-app ms-2">w tym miesiącu</span>
+      </div>
+    </div>
+  </div>
+</div>

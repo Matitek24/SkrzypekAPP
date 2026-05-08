@@ -1,82 +1,174 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 
+/* ============================================================
+   DESIGN SYSTEM — SkrzypekApp
+   Styl: Apple/macOS · Kolor przewodni: Pastelowy Błękit
+   ============================================================ */
 
 :root {
+  /* --- PALETA KOLORÓW --- */
+  --blue-50:  #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
 
-  --brand-bg: #f9f4f7;      /* Jasne tło */
-  --brand-primary: #3e3f4b; /* Głęboki granat */
-  --brand-accent: #5ec785;  /* Energiczny pomarańcz */
-  
-  /* Nadpisywanie zmiennych systemowych Bootstrapa (opcjonalnie) */
-  --bs-primary: var(--brand-primary);
-  --bs-body-bg: var(--brand-bg);
+  /* --- TOKENY APLIKACJI --- */
+  --color-bg:          #f0f4f8;       /* Bardzo jasne, zimne tło */
+  --color-surface:     #ffffff;       /* Czyste karty */
+  --color-surface-alt: #f8fafc;      /* Alternatywne tło kart */
+  --color-border:      #e2e8f0;      /* Delikatna ramka */
+  --color-border-hover:#c7d8f0;
+
+  --color-primary:     #3b82f6;      /* Pastelowy błękit – akcent */
+  --color-primary-light: #dbeafe;    /* Tło aktywnego elementu */
+  --color-primary-dark:  #2563eb;
+
+  --color-text-main:   #0f172a;      /* Główny tekst */
+  --color-text-sub:    #64748b;      /* Podtytuły */
+  --color-text-muted:  #94a3b8;     /* Elementy nieaktywne */
+
+  --color-success:     #22c55e;
+  --color-success-bg:  #f0fdf4;
+  --color-danger:      #ef4444;
+  --color-danger-bg:   #fef2f2;
+
+  /* --- SIDEBAR --- */
+  --sidebar-width-collapsed: 72px;
+  --sidebar-width-expanded:  248px;
+  --sidebar-bg:        #ffffff;
+  --sidebar-border:    #e8eef6;
+
+  /* --- TYPOGRAFIA --- */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* --- RADIUS --- */
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  20px;
+  --radius-2xl: 24px;
+
+  /* --- CIENIE (Apple-style: subtelne, miękkie) --- */
+  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-blue: 0 4px 16px rgba(59, 130, 246, 0.18);
+}
+
+/* ============================================================
+   RESET & BAZA
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    background-color: var(--bg-app) !important;
-    font-family: 'Inter', sans-serif !important;
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Subtelny cień dla nowoczesnych kart */
-.shadow-soft {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02) !important;
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+
+.surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
-.transition-all {
-    transition: all 0.2s ease-in-out;
+.surface-hover {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.surface-hover:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
-/* Styl dla aktywnego przycisku w menu - pastelowy błękit */
-.btn-primary {
-    background-color: #eef2ff !important;
-    color: #6366f1 !important;
-    font-weight: 600;
+.text-main   { color: var(--color-text-main) !important; }
+.text-sub    { color: var(--color-text-sub) !important; }
+.text-muted-app  { color: var(--color-text-muted) !important; }
+.text-primary-app { color: var(--color-primary) !important; }
+
+.bg-primary-light { background-color: var(--color-primary-light) !important; }
+
+.rounded-app { border-radius: var(--radius-lg) !important; }
+
+/* Badge/pill label */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.pill-blue  { background: var(--blue-100); color: var(--blue-600); }
+.pill-green { background: var(--color-success-bg); color: var(--color-success); }
+.pill-red   { background: var(--color-danger-bg);  color: var(--color-danger); }
+
+/* Scroll - Apple-style */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #dde4f0 transparent;
+}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #dde4f0; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #c7d2e0; }
+
+/* Animacje */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fadeInUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Pastelowy badge sukcesu */
-.bg-success-soft {
-  background-color: #ecfdf5 !important;
-  color: #10b981 !important;
-  border: 1px solid rgba(16, 185, 129, 0.1);
-}
-
-/* Customizacja dialogu PrimeNG */
-.p-dialog .p-dialog-header {
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  padding: 2rem 2rem 1rem 2rem;
-}
-
-.p-dialog .p-dialog-content {
-  padding: 0 2rem 2rem 2rem;
-}
-
-.p-dialog .p-dialog-footer {
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
-  padding: 1rem 2rem 2rem 2rem;
-}
-
-.border-round-xl {
-  border-radius: 12px !important;
-}
+/* Avatar circle */
 .user-avatar-circle {
-  width: 40px;
-  height: 40px;
-  background-color: var(--brand-primary);
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--blue-400), var(--blue-600));
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-blue);
 }
 
-.text-brand-accent {
-  color: var(--brand-accent) !important;
+/* PrimeNG dialog overrides */
+.p-dialog .p-dialog-header {
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
+  padding: 1.75rem 2rem 1rem;
 }
-
-.animate__fadeIn {
-  animation-duration: 0.5s;
+.p-dialog .p-dialog-content  { padding: 0 2rem 1.5rem; }
+.p-dialog .p-dialog-footer {
+  border-bottom-left-radius: var(--radius-xl);
+  border-bottom-right-radius: var(--radius-xl);
+  padding: 1rem 2rem 1.75rem;
 }

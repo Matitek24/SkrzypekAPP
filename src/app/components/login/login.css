@@ -25,7 +25,7 @@
     backdrop-filter: blur(15px); /* KLUCZOWE: Rozmycie tła pod spodem */
     -webkit-backdrop-filter: blur(15px); /* Dla Safari */
     border: 1px solid var(--glass-border); /* Subtelna biała ramka */
-    border-radius: 24px; /* Mocne zaokrąglenie */
+    border-radius: 24px; 
     max-width: 450px;
     width: 100%;
 }
