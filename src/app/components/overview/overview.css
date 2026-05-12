@@ -1,3 +1,7 @@
+/* ============================================================
+   OVERVIEW PAGE — Apple/macOS style
+   ============================================================ */
+
 /* PAGE HEADER — bazowy styl, uzywany przez wiele sekcji */
 .page-header {
   margin-bottom: 2rem;
@@ -17,34 +21,247 @@
   margin: 0;
 }
 
-/* MINIMAL BALANCE CARD */
-.minimal-balance-card {
+/* ============================================================
+   KPI GRID
+   ============================================================ */
+
+.overview-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 2rem;
+}
+
+.overview-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 20px 24px;
-  box-shadow: var(--shadow-sm);
+  padding: 20px 22px 16px;
+  box-shadow: var(--shadow-xs);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
-.minimal-balance-header {
+
+.overview-card:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.overview-card-highlight {
+  border-color: rgba(59, 130, 246, 0.2);
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.08);
+}
+
+.overview-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
 }
-.minimal-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-text-sub);
-}
-.minimal-balance-amount {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--color-text-main);
-  letter-spacing: -1px;
-  line-height: 1;
-  margin-bottom: 12px;
-}
-.minimal-balance-footer {
+
+.overview-card-label {
   font-size: 12px;
   font-weight: 500;
+  color: var(--color-text-sub);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.overview-card-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.overview-card-icon.blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+.overview-card-icon.emerald {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+.overview-card-icon.violet {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+.overview-card-icon.amber {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.overview-card-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text-main);
+  letter-spacing: -0.8px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.overview-card-footer {
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.overview-card-hint {
+  color: var(--color-text-muted);
+  margin-left: 2px;
+}
+
+/* Progress bars */
+.overview-progress-bar {
+  width: 100%;
+  height: 5px;
+  background: var(--color-surface-alt, #f1f5f9);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.overview-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fill-violet {
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+}
+
+.fill-amber {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+/* ============================================================
+   RECENT TRANSACTIONS — COMPACT
+   ============================================================ */
+
+.overview-transactions {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.overview-transactions-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.overview-transactions-header h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.overview-transactions-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.overview-transactions-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.overview-tx-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.overview-tx-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.overview-tx-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.overview-tx-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.overview-tx-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.overview-tx-desc {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overview-tx-meta {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-top: 1px;
+}
+
+.overview-tx-amount {
+  font-size: 13.5px;
+  font-weight: 600;
+  flex-shrink: 0;
+  letter-spacing: -0.3px;
+}
+
+.overview-tx-amount.income {
+  color: #16a34a;
+}
+
+.overview-tx-amount.expense {
+  color: #dc2626;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 640px) {
+  .overview-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .overview-card-value {
+    font-size: 20px;
+  }
 }

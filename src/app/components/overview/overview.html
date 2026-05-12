@@ -3,19 +3,78 @@
   <p>Oto podsumowanie Twoich finansów i aktywności.</p>
 </div>
 
-<!-- KARTA SALDA NA STRONIE GLOWNEJ -->
-<div class="row g-4">
-  <div class="col-12 col-md-6 col-xl-4">
-    <div class="minimal-balance-card">
-      <div class="minimal-balance-header">
-        <span class="minimal-label">Łączny kapitał</span>
-        <i class="bi bi-wallet2 text-muted-app"></i>
-      </div>
-      <div class="minimal-balance-amount">{{ totalBalance | currency:' PLN ':'symbol':'1.2-2' }}</div>
-      <div class="minimal-balance-footer">
-        <span class="text-success"><i class="bi bi-arrow-up-right"></i> +2.4%</span>
-        <span class="text-muted-app ms-2">w tym miesiącu</span>
+<!-- KARTY KPI — SIATKA -->
+<div class="overview-kpi-grid">
+
+  <!-- Łączny kapitał -->
+  <div class="overview-card overview-card-highlight">
+    <div class="overview-card-header">
+      <span class="overview-card-label">Łączny kapitał</span>
+      <div class="overview-card-icon blue">
+        <i class="bi bi-wallet2"></i>
       </div>
     </div>
+    <div class="overview-card-value">{{ totalBalance | currency:' PLN ':'symbol':'1.2-2' }}</div>
+    <div class="overview-card-footer">
+      <span class="text-success"><i class="bi bi-arrow-up-right"></i> +2.4%</span>
+      <span class="overview-card-hint">w tym miesiącu</span>
+    </div>
   </div>
+
+  @if (dashboardData) {
+
+
+    <!-- Poduszka bezpieczeństwa -->
+    <div class="overview-card">
+      <div class="overview-card-header">
+        <span class="overview-card-label">Poduszka bezpieczeństwa</span>
+        <div class="overview-card-icon amber">
+          <i class="bi bi-bullseye"></i>
+        </div>
+      </div>
+      <div class="overview-card-value">{{ dashboardData.emergencyFundProgressPercent | number:'1.1-1' }}%</div>
+      <div class="overview-card-footer">
+        <div class="overview-progress-bar">
+          <div class="overview-progress-fill fill-amber"
+               [style.width.%]="dashboardData.emergencyFundProgressPercent > 100 ? 100 : dashboardData.emergencyFundProgressPercent">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  }
+
 </div>
+
+<!-- OSTATNIE TRANSAKCJE — SZYBKI PODGLĄD -->
+@if (dashboardData?.recentTransactions?.length) {
+  <section class="overview-transactions animate-fade-up">
+    <div class="overview-transactions-header">
+      <h2>Ostatnie operacje</h2>
+      <span class="overview-transactions-badge">{{ dashboardData!.recentTransactions!.length }}</span>
+    </div>
+
+    <div class="overview-transactions-list">
+      @for (tx of dashboardData!.recentTransactions!.slice(0, 3); track tx.id) {
+        <div class="overview-tx-item">
+          <div class="overview-tx-left">
+            <div class="overview-tx-icon"
+                 [style.background]="getCategoryColor(tx.category) + '15'"
+                 [style.color]="getCategoryColor(tx.category)">
+              <i [class]="getCategoryIcon(tx.category)"></i>
+            </div>
+            <div class="overview-tx-info">
+              <span class="overview-tx-desc">{{ tx.description }}</span>
+              <span class="overview-tx-meta">{{ tx.category }} · {{ tx.transactionDate | date:'d MMM' }}</span>
+            </div>
+          </div>
+          <span class="overview-tx-amount"
+                [class.income]="tx.type === 'INCOME'"
+                [class.expense]="tx.type === 'EXPENSE'">
+            {{ tx.type === 'INCOME' ? '+' : '-' }}{{ tx.amount | number:'1.2-2' }} zł
+          </span>
+        </div>
+      }
+    </div>
+  </section>
+}

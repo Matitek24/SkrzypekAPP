@@ -2,64 +2,264 @@
 
   <!-- NAGŁÓWEK STRONY -->
   <div class="budget-page-header">
-    <h1>Budżet</h1>
-    <p>Zarządzaj swoimi kontami i śledź przepływ finansów.</p>
+    <div class="header-content">
+      <div>
+        <h1>Budżet</h1>
+        <p>Zarządzaj swoimi kontami i śledź przepływ finansów.</p>
+      </div>
+      <button class="btn-add-transaction" (click)="openAddTransactionModal()">
+        <i class="bi bi-plus-lg"></i>
+        Dodaj transakcję
+      </button>
+    </div>
   </div>
 
-  <!-- KARTA SALDA -->
+  <!-- KARTA SALDA (tylko kwota) -->
   <div class="balance-card">
     <div class="balance-label">Łączne saldo</div>
     <div class="balance-amount">{{ total | currency:' PLN ':'symbol':'1.2-2' }}</div>
-    <div class="balance-stats">
-      <div class="balance-stat-item">
-        <i class="bi bi-arrow-down-circle-fill"></i>
-        <span>Przychody: <strong>3 200 PLN</strong></span>
+  </div>
+
+  <!-- MAIN GRID: KONTA + KPI -->
+  <div class="dashboard-grid">
+    
+    <!-- LEWA KOLUMNA: Lista kont -->
+    <section class="accounts-column">
+      <div class="accounts-header">
+        <h2>Twoje konta</h2>
+        <button class="btn-add-account" title="Dodaj nowe konto" (click)="openAddAccountModal()">
+          <i class="bi bi-plus-lg"></i>
+        </button>
       </div>
-      <div class="balance-stat-item">
-        <i class="bi bi-arrow-up-circle-fill"></i>
-        <span>Wydatki: <strong>1 840 PLN</strong></span>
+
+      <div class="accounts-list">
+        @for (item of accounts; track item.id) {
+          <div class="clean-card">
+            <div class="card-left">
+              <div class="icon-box">
+                <i [class]="item.definition.icon"></i>
+              </div>
+              <div>
+                <div class="bank-name">{{ item.definition.name }}</div>
+                <div class="bank-type">Konto osobiste</div>
+              </div>
+            </div>
+            <div class="card-right">
+              <span class="bank-balance">{{ item.balance | currency:' PLN ' }}</span>
+              <i class="fa-solid fa-chevron-right arrow-icon"></i>
+            </div>
+          </div>
+        } @empty {
+          <div class="clean-empty-state">
+            <i class="bi bi-wallet2 empty-icon"></i>
+            <p class="fw-medium mb-1" style="color: var(--color-text-sub);">Brak kont</p>
+            <p class="small mb-2">Dodaj konto, by zacząć.</p>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- PRAWA KOLUMNA: KPI (Runway + Poduszka) -->
+    <section class="kpi-column">
+      @if (dashboardData) {
+        <!-- Financial Runway -->
+        <div class="kpi-card">
+          <div class="kpi-icon-box kpi-emerald">
+            <i class="bi bi-shield-fill-check"></i>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Runway finansowy</span>
+            <span class="kpi-value">{{ dashboardData.financialRunwayMonths | number:'1.1-1' }} miesięcy</span>
+            <div class="kpi-progress-bar">
+              <div class="kpi-progress-fill kpi-fill-emerald"
+                   [style.width.%]="(dashboardData.financialRunwayMonths / 24) * 100 > 100 ? 100 : (dashboardData.financialRunwayMonths / 24) * 100">
+              </div>
+            </div>
+            <span class="kpi-hint">cel: 24 miesiące</span>
+          </div>
+        </div>
+
+        <!-- Emergency Fund -->
+        <div class="kpi-card">
+          <div class="kpi-icon-box kpi-amber">
+            <i class="bi bi-bullseye"></i>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Poduszka bezpieczeństwa</span>
+            <span class="kpi-value">{{ dashboardData.emergencyFundProgressPercent | number:'1.1-1' }}%</span>
+            <div class="kpi-progress-bar">
+              <div class="kpi-progress-fill kpi-fill-amber"
+                   [style.width.%]="dashboardData.emergencyFundProgressPercent > 100 ? 100 : dashboardData.emergencyFundProgressPercent">
+              </div>
+            </div>
+            <span class="kpi-hint">cel: 100%</span>
+          </div>
+        </div>
+      }
+    </section>
+
+  </div>
+
+  <!-- OSTATNIE TRANSAKCJE -->
+  @if (dashboardData?.recentTransactions?.length) {
+    <section class="transactions-section animate-fade-up">
+      <div class="transactions-header">
+        <h2>Ostatnie transakcje</h2>
+        <span class="transactions-count">{{ dashboardData!.recentTransactions!.length }} pozycji</span>
+      </div>
+
+      <div class="transactions-list">
+        @for (tx of dashboardData!.recentTransactions!; track tx.id) {
+          <div class="transaction-item">
+            <div class="transaction-left">
+              <div class="transaction-icon" [style.background]="getCategoryColor(tx.category) + '15'" [style.color]="getCategoryColor(tx.category)">
+                <i [class]="getCategoryIcon(tx.category)"></i>
+              </div>
+              <div class="transaction-info">
+                <span class="transaction-description">{{ tx.description }}</span>
+                <span class="transaction-meta">
+                  <span class="transaction-category">{{ tx.category }}</span>
+                  <span class="transaction-dot">·</span>
+                  <span class="transaction-date">{{ tx.transactionDate | date:'d MMM yyyy' }}</span>
+                </span>
+              </div>
+            </div>
+            <div class="transaction-right">
+              <span class="transaction-amount" [class.income]="tx.type === 'INCOME'" [class.expense]="tx.type === 'EXPENSE'">
+                {{ tx.type === 'INCOME' ? '+' : '-' }}{{ tx.amount | number:'1.2-2' }} zł
+              </span>
+              <span class="transaction-type-badge" [class.badge-income]="tx.type === 'INCOME'" [class.badge-expense]="tx.type === 'EXPENSE'">
+                {{ tx.type === 'INCOME' ? 'Przychód' : 'Wydatek' }}
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- WYKRES MIESIĘCZNY -->
+  @if (monthlyStats.length > 0) {
+    <app-finance-chart [monthlyStats]="monthlyStats"></app-finance-chart>
+  }
+
+</div>
+
+<!-- MODAL: DODAJ TRANSAKCJĘ -->
+@if (isTransactionModalOpen) {
+  <div class="modal-overlay animate-fade-in" (click)="closeAddTransactionModal()">
+    <div class="apple-modal animate-slide-up" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Nowa transakcja</h3>
+        <button class="btn-close-modal" (click)="closeAddTransactionModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <form class="transaction-form">
+          
+          <div class="form-group type-toggle">
+            <label>
+              <input type="radio" name="txType" value="EXPENSE" checked>
+              <span class="toggle-btn expense-toggle">Wydatek</span>
+            </label>
+            <label>
+              <input type="radio" name="txType" value="INCOME">
+              <span class="toggle-btn income-toggle">Przychód</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Konto</label>
+            <select class="form-control apple-select">
+              <option value="" disabled selected>Wybierz konto...</option>
+              @for (acc of accounts; track acc.id) {
+                <option [value]="acc.id">{{ acc.definition.name }} ({{ acc.balance | number:'1.2-2' }} zł)</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group half">
+              <label class="form-label">Kwota (PLN)</label>
+              <input type="number" class="form-control apple-input" placeholder="0.00" step="0.01">
+            </div>
+            <div class="form-group half">
+              <label class="form-label">Kategoria</label>
+              <select class="form-control apple-select">
+                <option>Jedzenie</option>
+                <option>Transport</option>
+                <option>Abonamenty</option>
+                <option>Rozrywka</option>
+                <option>Zdrowie</option>
+                <option>Wynagrodzenie</option>
+                <option>Inne</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Opis</label>
+            <input type="text" class="form-control apple-input" placeholder="Np. Zakupy w Biedronce">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Data</label>
+            <input type="date" class="form-control apple-input" [value]="todayDate">
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeAddTransactionModal()">Anuluj</button>
+        <button class="btn-save" (click)="closeAddTransactionModal()">Dodaj</button>
       </div>
     </div>
   </div>
+}
 
-  <!-- LISTA KONT -->
-  <section class="accounts-container">
-
-    <div class="accounts-header">
-      <h2>Twoje konta</h2>
-      <button class="btn-add-account" title="Dodaj nowe konto">
-        <i class="bi bi-plus-lg"></i>
-        Dodaj konto
-      </button>
-    </div>
-
-    <div class="accounts-list">
-      @for (item of accounts; track item.id) {
-        <div class="clean-card">
-          <div class="card-left">
-            <div class="icon-box">
-              <i [class]="item.definition.icon"></i>
-            </div>
-            <div>
-              <div class="bank-name">{{ item.definition.name }}</div>
-              <div class="bank-type">Konto osobiste</div>
-            </div>
+<!-- MODAL: DODAJ KONTO -->
+@if (isAccountModalOpen) {
+  <div class="modal-overlay animate-fade-in" (click)="closeAddAccountModal()">
+    <div class="apple-modal animate-slide-up" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Nowe konto</h3>
+        <button class="btn-close-modal" (click)="closeAddAccountModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <form class="transaction-form">
+          <div class="form-group">
+            <label class="form-label">Nazwa konta</label>
+            <input type="text" class="form-control apple-input" placeholder="Np. Konto osobiste mBank">
           </div>
-          <div class="card-right">
-            <span class="bank-balance">{{ item.balance | currency:' PLN ' }}</span>
-            <i class="fa-solid fa-chevron-right arrow-icon"></i>
+          
+          <div class="form-group">
+            <label class="form-label">Początkowe saldo (PLN)</label>
+            <input type="number" class="form-control apple-input" placeholder="0.00" step="0.01">
           </div>
-        </div>
-      } @empty {
-        <div class="clean-empty-state">
-          <i class="bi bi-wallet2 empty-icon"></i>
-          <p class="fw-medium mb-1" style="color: var(--color-text-sub);">Nie masz jeszcze żadnych kont</p>
-          <p class="small mb-2">Dodaj pierwsze konto, aby zacząć śledzić budżet.</p>
-          <button class="btn-text">Dodaj pierwsze konto →</button>
-        </div>
-      }
+
+          <div class="form-group">
+            <label class="form-label">Ikona banku</label>
+            <select class="form-control apple-select">
+              <option value="bi-bank">Bank (domyślna)</option>
+              <option value="bi-wallet2">Portfel</option>
+              <option value="bi-piggy-bank">Skarbonka</option>
+              <option value="bi-credit-card">Karta kredytowa</option>
+              <option value="bi-building">Firma</option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeAddAccountModal()">Anuluj</button>
+        <button class="btn-save" (click)="closeAddAccountModal()">Zapisz</button>
+      </div>
     </div>
-
-  </section>
-
-</div>
+  </div>
+}

@@ -1,0 +1,34 @@
+<div class="chart-wrapper animate-fade-up">
+
+  <!-- NAGŁÓWEK -->
+  <div class="chart-header">
+    <div>
+      <h2 class="chart-title">Przychody vs Wydatki</h2>
+      <p class="chart-subtitle">Miesięczne zestawienie za rok 2026</p>
+    </div>
+    <div class="chart-summary-pills">
+      <span class="summary-pill income">
+        <i class="bi bi-arrow-up-circle-fill"></i>
+        {{ totalIncome | number:'1.0-0' }} zł
+      </span>
+      <span class="summary-pill expense">
+        <i class="bi bi-arrow-down-circle-fill"></i>
+        {{ totalExpense | number:'1.0-0' }} zł
+      </span>
+      <span class="summary-pill" [class.net-positive]="netBalance >= 0" [class.net-negative]="netBalance < 0">
+        <i class="bi" [class.bi-graph-up-arrow]="netBalance >= 0" [class.bi-graph-down-arrow]="netBalance < 0"></i>
+        Netto: {{ netBalance | number:'1.0-0' }} zł
+      </span>
+    </div>
+  </div>
+
+  <!-- WYKRES -->
+  <div class="chart-canvas-wrapper">
+    <canvas baseChart
+      [data]="chartData"
+      [options]="chartOptions"
+      [type]="chartType">
+    </canvas>
+  </div>
+
+</div>
