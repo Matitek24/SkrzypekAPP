@@ -22,4 +22,10 @@ export class FinanceService {
   addTransaction(request: any): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/transactions`, request);
   }
+  deleteTransaction(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/transactions/${id}`);
+  }
+  updateTransaction(id: string, request: any): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/transactions/${id}`, request);
+  }
 }

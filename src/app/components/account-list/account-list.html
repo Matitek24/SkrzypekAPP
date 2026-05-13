@@ -46,7 +46,9 @@
             </div>
             <div class="card-right">
               <span class="bank-balance">{{ item.balance | currency:' PLN ' }}</span>
-              <i class="fa-solid fa-chevron-right arrow-icon"></i>
+              <button class="btn-action-mini delete" (click)="$event.stopPropagation(); deleteAccount(item.id)">
+                <i class="bi bi-trash"></i>
+              </button>
             </div>
           </div>
         } @empty {
@@ -111,6 +113,10 @@
       <div class="transactions-list">
         @for (tx of dashboardData!.recentTransactions!; track tx.id) {
           <div class="transaction-item">
+            <div class="tx-actions">
+             
+              <button class="btn-action-mini delete" (click)="deleteTransaction(tx.id)"><i class="bi bi-trash"></i></button>
+           </div>
             <div class="transaction-left">
               <div class="transaction-icon" [style.background]="getCategoryColor(tx.category) + '15'" [style.color]="getCategoryColor(tx.category)">
                 <i [class]="getCategoryIcon(tx.category)"></i>
@@ -124,10 +130,13 @@
                 </span>
               </div>
             </div>
+            
             <div class="transaction-right">
+             
               <span class="transaction-amount" [class.income]="tx.type === 'INCOME'" [class.expense]="tx.type === 'EXPENSE'">
                 {{ tx.type === 'INCOME' ? '+' : '-' }}{{ tx.amount | number:'1.2-2' }} zł
               </span>
+              
               <span class="transaction-type-badge" [class.badge-income]="tx.type === 'INCOME'" [class.badge-expense]="tx.type === 'EXPENSE'">
                 {{ tx.type === 'INCOME' ? 'Przychód' : 'Wydatek' }}
               </span>

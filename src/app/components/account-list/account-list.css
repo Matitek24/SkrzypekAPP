@@ -724,3 +724,62 @@
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Kontener na przyciski akcji w liście transakcji */
+.tx-actions {
+  display: flex;
+  gap: 8px;
+  margin-right: 12px;
+  opacity: 0.6; /* Lekko przygaszone domyślnie */
+  transition: opacity 0.2s ease;
+}
+
+/* Pokazujemy przyciski wyraźniej po najechaniu na cały wiersz transakcji */
+.transaction-item:hover .tx-actions {
+  opacity: 1;
+}
+
+/* Bazowy styl dla mini-przycisków akcji */
+.btn-action-mini {
+  background: var(--color-bg-sub, #f5f5f7);
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-sub, #86868b);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-action-mini i {
+  font-size: 1.1rem;
+}
+
+/* Styl dla przycisku usuwania (Kosz) */
+.btn-action-mini.delete:hover {
+  background-color: #ff3b30; /* Apple Red */
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
+}
+
+/* Specyficzne poprawki dla kosza przy liście kont (card-right) */
+.card-right .btn-action-mini.delete {
+  margin-left: 10px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.card-right .btn-action-mini.delete:hover {
+  background-color: #ff453a;
+  color: white;
+}
+
+/* Responsywność - na telefonach przyciski zawsze widoczne */
+@media (max-width: 768px) {
+  .tx-actions {
+    opacity: 1;
+  }
+}

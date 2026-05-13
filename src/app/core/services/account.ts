@@ -22,4 +22,10 @@ export class AccountService {
   createAccount(request: any): Observable<void>{
     return this.http.post<void>(`${this.apiUrl}`, request);  
   }
+  deleteAccount(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+  updateBalance(id: string, balance: number): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${id}/balance`, { balance });
+  }
 }
