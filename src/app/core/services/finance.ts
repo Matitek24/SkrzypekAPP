@@ -19,4 +19,7 @@ export class FinanceService {
   getMonthlyStats(year: number): Observable<MonthlyStatDto[]> {
     return this.http.get<MonthlyStatDto[]>(`${this.apiUrl}/stats?year=${year}`);
   }
+  addTransaction(request: any): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/transactions`, request);
+  }
 }

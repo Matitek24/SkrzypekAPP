@@ -19,4 +19,7 @@ export class AccountService {
     const res = this.http.get<AccountResponse>(this.apiUrl, {headers});
     return res; 
   }
+  createAccount(request: any): Observable<void>{
+    return this.http.post<void>(`${this.apiUrl}`, request);  
+  }
 }

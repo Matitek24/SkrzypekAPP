@@ -5,11 +5,12 @@ import { Account } from '../../core/models/account.model.js';
 import { FinanceDashboardResponse, MonthlyStatDto } from '../../core/models/finance.model';
 import { CurrencyPipe, CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { FinanceChartComponent } from '../finance-chart/finance-chart';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-account-list',
   standalone: true,
-  imports: [CurrencyPipe, CommonModule, DatePipe, DecimalPipe, FinanceChartComponent],
+  imports: [CurrencyPipe, CommonModule, DatePipe, DecimalPipe, FinanceChartComponent, ReactiveFormsModule],
   templateUrl: './account-list.html',
   styleUrl: './account-list.css'
 })
@@ -17,14 +18,28 @@ export class AccountListComponent implements OnInit {
   accounts: Account[] = [];
   total: number = 0;
 
-  // Dane z backendu
+  accountForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    initialBalance: new FormControl(0, [Validators.required, Validators.min(0)]),
+    icon: new FormControl('bi-bank', Validators.required),
+    groupType: new FormControl('BANK', Validators.required)
+  });
+
   dashboardData?: FinanceDashboardResponse;
   monthlyStats: MonthlyStatDto[] = [];
 
-  // Modal stanu
   isTransactionModalOpen = false;
   isAccountModalOpen = false;
   todayDate = new Date().toISOString().split('T')[0];
+
+  transactionForm = new FormGroup({
+    type: new FormControl('EXPENSE', Validators.required),
+    accountId: new FormControl('', Validators.required), 
+    amount: new FormControl(null, [Validators.required, Validators.min(0.01)]), 
+    category: new FormControl('Jedzenie', Validators.required),
+    description: new FormControl(''), 
+    transactionDate: new FormControl(this.todayDate, Validators.required)
+  });
 
   constructor(
     private accountService: AccountService,
@@ -109,4 +124,45 @@ export class AccountListComponent implements OnInit {
   closeAddAccountModal() {
     this.isAccountModalOpen = false;
   }
+
+  submitAccount(){
+    if(this.accountForm.valid){
+      const formValues = this.accountForm.value;
+
+      this.accountService.createAccount(formValues).subscribe({
+        next: (res) => {
+         this.closeAddAccountModal();
+         this.accountForm.reset({ icon: 'bi-bank', groupType: 'BANK', initialBalance: 0 });
+        },
+        error: (err) => console.error('Błąd tworzenia konta!', err)
+      })
+    }
+  }
+
+  submitTransaction() {
+    if (this.transactionForm.valid) {
+      const formValues = this.transactionForm.value;
+
+      this.financeService.addTransaction(formValues).subscribe({
+        next: () => {
+          console.log('Transakcja pomyślnie dodana!');
+          this.closeAddTransactionModal();
+          
+          this.transactionForm.reset({
+            type: 'EXPENSE',
+            accountId: '',
+            amount: null,
+            category: 'Jedzenie',
+            description: '',
+            transactionDate: this.todayDate
+          });
+          this.ngOnInit(); 
+        },
+        error: (err) => {
+          console.error('Błąd podczas zapisywania transakcji:', err);
+        }
+      });
+    }
+  }
+
 }

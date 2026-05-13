@@ -703,3 +703,24 @@
        gap: 0;
      }
    }
+
+.error-message {
+  color: #ff3b30; 
+  font-size: 11px;
+  margin-top: 4px;
+  font-weight: 500;
+  padding-left: 2px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.apple-input.is-invalid, 
+.apple-select.is-invalid {
+  border-color: #ff3b30 !important;
+  background-color: #fffcfc;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

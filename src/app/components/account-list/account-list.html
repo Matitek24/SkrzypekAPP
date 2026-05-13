@@ -144,8 +144,6 @@
   }
 
 </div>
-
-<!-- MODAL: DODAJ TRANSAKCJĘ -->
 @if (isTransactionModalOpen) {
   <div class="modal-overlay animate-fade-in" (click)="closeAddTransactionModal()">
     <div class="apple-modal animate-slide-up" (click)="$event.stopPropagation()">
@@ -157,37 +155,49 @@
       </div>
       
       <div class="modal-body">
-        <form class="transaction-form">
+        <form class="transaction-form" [formGroup]="transactionForm">
           
           <div class="form-group type-toggle">
             <label>
-              <input type="radio" name="txType" value="EXPENSE" checked>
+              <input type="radio" value="EXPENSE" formControlName="type">
               <span class="toggle-btn expense-toggle">Wydatek</span>
             </label>
             <label>
-              <input type="radio" name="txType" value="INCOME">
+              <input type="radio" value="INCOME" formControlName="type">
               <span class="toggle-btn income-toggle">Przychód</span>
             </label>
           </div>
 
           <div class="form-group">
             <label class="form-label">Konto</label>
-            <select class="form-control apple-select">
-              <option value="" disabled selected>Wybierz konto...</option>
+            <select class="form-control apple-select" 
+                    [class.is-invalid]="transactionForm.get('accountId')?.invalid && transactionForm.get('accountId')?.touched"
+                    formControlName="accountId">
+              <option value="" disabled>Wybierz konto...</option>
               @for (acc of accounts; track acc.id) {
                 <option [value]="acc.id">{{ acc.definition.name }} ({{ acc.balance | number:'1.2-2' }} zł)</option>
+              } @empty {
+                <option disabled>Ładowanie kont...</option>
               }
             </select>
+            @if (transactionForm.get('accountId')?.invalid && transactionForm.get('accountId')?.touched) {
+              <div class="error-message">Wybór konta jest wymagany</div>
+            }
           </div>
 
           <div class="form-row">
             <div class="form-group half">
               <label class="form-label">Kwota (PLN)</label>
-              <input type="number" class="form-control apple-input" placeholder="0.00" step="0.01">
+              <input type="number" class="form-control apple-input" placeholder="0.00" step="0.01" 
+                     [class.is-invalid]="transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched"
+                     formControlName="amount">
+              @if (transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched) {
+                <div class="error-message">Podaj kwotę > 0</div>
+              }
             </div>
             <div class="form-group half">
               <label class="form-label">Kategoria</label>
-              <select class="form-control apple-select">
+              <select class="form-control apple-select" formControlName="category">
                 <option>Jedzenie</option>
                 <option>Transport</option>
                 <option>Abonamenty</option>
@@ -201,12 +211,16 @@
 
           <div class="form-group">
             <label class="form-label">Opis</label>
-            <input type="text" class="form-control apple-input" placeholder="Np. Zakupy w Biedronce">
+            <input type="text" class="form-control apple-input" placeholder="Np. Zakupy w Biedronce" formControlName="description">
           </div>
           
           <div class="form-group">
             <label class="form-label">Data</label>
-            <input type="date" class="form-control apple-input" [value]="todayDate">
+            <input type="date" class="form-control apple-input" formControlName="transactionDate"
+                   [class.is-invalid]="transactionForm.get('transactionDate')?.invalid && transactionForm.get('transactionDate')?.touched">
+            @if (transactionForm.get('transactionDate')?.invalid && transactionForm.get('transactionDate')?.touched) {
+              <div class="error-message">Data jest wymagana</div>
+            }
           </div>
 
         </form>
@@ -214,13 +228,12 @@
 
       <div class="modal-footer">
         <button class="btn-cancel" (click)="closeAddTransactionModal()">Anuluj</button>
-        <button class="btn-save" (click)="closeAddTransactionModal()">Dodaj</button>
+        <button class="btn-save" [disabled]="transactionForm.invalid" (click)="submitTransaction()">Dodaj</button>
       </div>
     </div>
   </div>
 }
 
-<!-- MODAL: DODAJ KONTO -->
 @if (isAccountModalOpen) {
   <div class="modal-overlay animate-fade-in" (click)="closeAddAccountModal()">
     <div class="apple-modal animate-slide-up" (click)="$event.stopPropagation()">
@@ -232,20 +245,40 @@
       </div>
       
       <div class="modal-body">
-        <form class="transaction-form">
+        <form class="transaction-form" [formGroup]="accountForm">
           <div class="form-group">
             <label class="form-label">Nazwa konta</label>
-            <input type="text" class="form-control apple-input" placeholder="Np. Konto osobiste mBank">
+            <input type="text" class="form-control apple-input" placeholder="Np. Konto osobiste mBank"
+                   [class.is-invalid]="accountForm.get('name')?.invalid && accountForm.get('name')?.touched"
+                   formControlName="name">
+            @if (accountForm.get('name')?.invalid && accountForm.get('name')?.touched) {
+              <div class="error-message">Nazwa konta jest wymagana</div>
+            }
           </div>
           
-          <div class="form-group">
-            <label class="form-label">Początkowe saldo (PLN)</label>
-            <input type="number" class="form-control apple-input" placeholder="0.00" step="0.01">
+          <div class="form-row">
+            <div class="form-group half">
+              <label class="form-label">Początkowe saldo</label>
+              <input type="number" class="form-control apple-input" placeholder="0.00" step="0.01" 
+                     [class.is-invalid]="accountForm.get('initialBalance')?.invalid && accountForm.get('initialBalance')?.touched"
+                     formControlName="initialBalance">
+              @if (accountForm.get('initialBalance')?.invalid && accountForm.get('initialBalance')?.touched) {
+                <div class="error-message">Podaj saldo (min. 0)</div>
+              }
+            </div>
+            <div class="form-group half">
+              <label class="form-label">Typ konta</label>
+              <select class="form-control apple-select" formControlName="groupType">
+                <option value="CASH">Gotówka</option>
+                <option value="INVESTMENT">Inwestycyjne</option>
+                <option value="BANK">Bankowe</option>
+              </select>
+            </div>
           </div>
 
           <div class="form-group">
             <label class="form-label">Ikona banku</label>
-            <select class="form-control apple-select">
+            <select class="form-control apple-select" formControlName="icon">
               <option value="bi-bank">Bank (domyślna)</option>
               <option value="bi-wallet2">Portfel</option>
               <option value="bi-piggy-bank">Skarbonka</option>
@@ -258,7 +291,7 @@
 
       <div class="modal-footer">
         <button class="btn-cancel" (click)="closeAddAccountModal()">Anuluj</button>
-        <button class="btn-save" (click)="closeAddAccountModal()">Zapisz</button>
+        <button class="btn-save" [disabled]="accountForm.invalid" (click)="submitAccount()">Zapisz</button>
       </div>
     </div>
   </div>
